@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         //Setteamos el adaptador
         sp.setAdapter(adapter);
 
+        visualizarItems();
+
     }
 
 
@@ -45,12 +47,27 @@ public class MainActivity extends AppCompatActivity {
             Nota notas1 = new Nota(txtTitulo, txtContenido);
             notas.add(notas1);
             Toast.makeText(this, "Nota ingresada con éxito!", Toast.LENGTH_SHORT).show();
+            visualizarItems();
             //Notificar al adaptador del cambio
             adapter.notifyDataSetChanged();
             
         } else {
             Toast.makeText(this, "Favor no dejar espacios en blanco!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void visualizarItems(){
+        itemLista.clear();
+
+        for(int i = 0; i < notas.size(); i++){
+            Nota notas2 = notas.get(i);
+
+            //String de datos para manejar la visualizacion
+            String datos = "Título: " + notas2.getTitulo() + "\n" + "Contenido: " + notas2.getContenido();
+            itemLista.add(datos);
+        }
+
+
     }
 
 }
