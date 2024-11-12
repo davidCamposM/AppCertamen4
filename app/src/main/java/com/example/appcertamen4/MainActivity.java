@@ -11,11 +11,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    EditText titulo, contenido;
+    EditText titulo, contenido, notaAEliminar;
     Spinner sp;
     ArrayList<String> itemLista;
-    ArrayAdapter<String>adapter;
-    
+    ArrayAdapter<String> adapter;
+
     //Lista con notas
     ArrayList<Nota> notas = new ArrayList<>();
 
@@ -27,10 +27,11 @@ public class MainActivity extends AppCompatActivity {
 
         titulo = findViewById(R.id.txtTitulo);
         contenido = findViewById(R.id.txtContenido);
+        notaAEliminar = findViewById(R.id.txtEliminar);
         sp = findViewById(R.id.spinnerrr);
 
         itemLista = new ArrayList<>();
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,itemLista);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, itemLista);
         //Setteamos el adaptador
         sp.setAdapter(adapter);
 
@@ -39,34 +40,61 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void agregarItem(View view){
+    public void agregarItem(View view) {
         String txtTitulo = titulo.getText().toString();
         String txtContenido = contenido.getText().toString();
 
-        if(!txtTitulo.isEmpty() && !txtContenido.isEmpty()){
+        if (!txtTitulo.isEmpty() && !txtContenido.isEmpty()) {
             Nota notas1 = new Nota(txtTitulo, txtContenido);
             notas.add(notas1);
             Toast.makeText(this, "Nota ingresada con éxito!", Toast.LENGTH_SHORT).show();
             visualizarItems();
             //Notificar al adaptador del cambio
             adapter.notifyDataSetChanged();
-            
+
         } else {
             Toast.makeText(this, "Favor no dejar espacios en blanco!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void visualizarItems(){
+    public void visualizarItems() {
         itemLista.clear();
 
-        for(int i = 0; i < notas.size(); i++){
+        for (int i = 0; i < notas.size(); i++) {
             Nota notas2 = notas.get(i);
 
             //String de datos para manejar la visualizacion
             String datos = "Título: " + notas2.getTitulo() + "\n" + "Contenido: " + notas2.getContenido();
             itemLista.add(datos);
         }
+    }
 
+    public void eliminarItem(View view){
+        String notaEliminar = notaAEliminar.getText().toString();
+        
+        if(!notaEliminar.isEmpty()){
+            boolean encontrado = false;
+            
+            for(int i = 0; i < notas.size(); i++){
+                Nota notas3 = notas.get(i);
+                if(notas3.getTitulo().equals(notaEliminar)){
+                    notas.remove(i);
+                    itemLista.remove(i);
+                    encontrado = true;
+                    break;
+
+                }
+            }
+            
+            if(encontrado){
+                Toast.makeText(this, "Nota eliminada correctamente del Spinner!", Toast.LENGTH_SHORT).show();
+                //Notificamos los cambios al adapter
+                adapter.notifyDataSetChanged();
+            }
+        } else {
+            Toast.makeText(this, "Favor no dejar campos vacíos!", Toast.LENGTH_SHORT).show();
+        }
+        
 
     }
 
